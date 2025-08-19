@@ -1,0 +1,4 @@
+apiVersion: v2
+name: tdrive-chart
+description: A Helm chart for TDrive stack
+version: 0.1.0

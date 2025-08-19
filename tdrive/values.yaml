@@ -1,0 +1,55 @@
+global:
+  storageClass: standard
+  tlsSecretName: tdrive-tls
+
+mongo:
+  image: mongo
+  pvc:
+    enabled: true
+    size: 1Gi
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "200m"
+      memory: "512Mi"
+
+node:
+  image: docker-registry.linagora.com/tdrive/tdrive-node
+  env:
+    DEV: production
+    SEARCH_DRIVER: mongodb
+    DB_DRIVER: mongodb
+    PUBSUB_TYPE: local
+  pvc:
+    enabled: true
+    size: 1Gi
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "512Mi"
+    limits:
+      cpu: "400m"
+      memory: "1Gi"
+
+frontend:
+  image: docker-registry.linagora.com/tdrive/tdrive-frontend
+  env:
+    DEV: production
+    SSL_CERTS: selfsigned
+    NODE_HOST: http://tdrive-node:4000
+  pvc:
+    enabled: true
+    size: 2Gi
+  ingress:
+    enabled: true
+    host: tdrive.local
+    tlsEnabled: true
+  resources:
+    requests:
+      cpu: "300m"
+      memory: "512Mi"
+    limits:
+      cpu: "600m"
+      memory: "1Gi"
